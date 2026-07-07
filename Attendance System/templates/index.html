@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Attendance Management System</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="background"></div>
+<div class="container">
+<header>
+<div>
+<h1><i class="fa-solid fa-user-graduate"></i> Student Attendance Management System</h1>
+<p id="todayDate"></p>
+</div>
+<button id="themeBtn"><i class="fa-solid fa-moon"></i></button>
+</header>
+
+<div class="dashboard">
+<div class="card total">
+<i class="fa-solid fa-users"></i>
+<h2>Total Students</h2>
+<h3>{{ students|length }}</h3>
+</div>
+
+<div class="card present">
+<i class="fa-solid fa-circle-check"></i>
+<h2>Present</h2>
+<h3 id="presentCount">0</h3>
+</div>
+
+<div class="card absent">
+<i class="fa-solid fa-circle-xmark"></i>
+<h2>Absent</h2>
+<h3 id="absentCount">0</h3>
+</div>
+</div>
+
+<div class="searchBox">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input type="text" id="searchInput" placeholder="Search Student...">
+</div>
+
+<div class="form-box">
+<h2><i class="fa-solid fa-user-plus"></i> Add Attendance</h2>
+<form action="/add" method="POST">
+<input type="text" name="name" placeholder="Enter Student Name" required>
+<select name="status">
+<option value="Present">Present</option>
+<option value="Absent">Absent</option>
+</select>
+<button type="submit"><i class="fa-solid fa-plus"></i> Add Attendance</button>
+</form>
+</div>
+
+<div class="table-container">
+<table id="studentTable">
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Status</th>
+<th>Date</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+{% for student in students %}
+<tr>
+<td>{{ student[0] }}</td>
+<td>{{ student[1] }}</td>
+<td>
+{% if student[2] == "Present" %}
+<span class="badge present">Present</span>
+{% else %}
+<span class="badge absent">Absent</span>
+{% endif %}
+</td>
+<td>{{ student[3] }}</td>
+<td>
+<a href="/delete/{{ student[0] }}" class="delete-btn"
+onclick="return confirm('Delete this attendance record?')">
+<i class="fa-solid fa-trash"></i> Delete
+</a>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+
+<footer>
+<p>Designed with ❤️ using Flask & SQLite</p>
+</footer>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
